@@ -509,7 +509,6 @@ html {
   transform: scale(0.9);
   transition: all 0.3s ease;
   box-sizing: border-box;
-  margin: auto;
 }
 
 .modal.active .modal-content {
@@ -825,17 +824,11 @@ html {
 @media (min-width: 1024px) {
   .modal {
     padding: var(--spacing-xl);
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
   
   .modal-content {
     max-width: 600px;
     min-width: 500px;
-    margin: 0;
-    align-self: center;
-    flex-shrink: 0;
   }
 }
 
