@@ -468,15 +468,9 @@ html {
   right: 0;
   bottom: 0;
   z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  margin: 0;
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease;
-  box-sizing: border-box;
 }
 
 .modal.active {
@@ -505,16 +499,17 @@ html {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  position: relative;
+  position: fixed;
+  top: 50%;
+  left: 50%;
   z-index: 2;
-  transform: scale(0.9);
+  transform: translate(-50%, -50%) scale(0.9);
   transition: all 0.3s ease;
   box-sizing: border-box;
-  margin: 20px;
 }
 
 .modal.active .modal-content {
-  transform: scale(1);
+  transform: translate(-50%, -50%) scale(1);
 }
 
 .modal-header {
@@ -827,7 +822,7 @@ html {
   .modal-content {
     max-width: 600px;
     min-width: 500px;
-    margin: 40px;
+    width: auto;
   }
 }
 
