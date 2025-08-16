@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PWA приложение для учёта подписок. Отслеживайте свои ежемесячные расходы, ведите статистику и управляйте подписками офлайн.">
+    <meta name="theme-color" content="#6200EA">
+    <meta name="msapplication-TileColor" content="#6200EA">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Мои Подписки">
+    
+    <title>Мои Подписки | PWA Tracker</title>
+    
+    <!-- Favicon и иконки для Apple -->
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+    
+    <!-- Манифест PWA -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Стили -->
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/themes.css">
+    <link rel="stylesheet" href="/css/animations.css">
+    
+    <!-- Material Design Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="theme-light">
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <h1 class="app-title">
+                <span class="material-icons">subscriptions</span>
+                Мои Подписки
+            </h1>
+            <div class="header-actions">
+                <button id="theme-toggle" class="icon-button" aria-label="Переключить тему">
+                    <span class="material-icons">dark_mode</span>
+                </button>
+                <button id="add-subscription" class="primary-button">
+                    <span class="material-icons">add</span>
+                    Добавить
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-main">
+        <!-- Dashboard Section -->
+        <section class="dashboard" aria-label="Панель статистики">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <span class="material-icons">payments</span>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Расходы в месяц</h3>
+                        <p class="stat-value" id="monthly-expense">0 ₽</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <span class="material-icons">calendar_today</span>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Активных подписок</h3>
+                        <p class="stat-value" id="active-count">0</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <span class="material-icons">trending_up</span>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Прогноз на год</h3>
+                        <p class="stat-value" id="yearly-forecast">0 ₽</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search and Filter Section -->
+        <section class="search-section" aria-label="Поиск и фильтры">
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <span class="material-icons">search</span>
+                    <input type="text" id="search-input" placeholder="Поиск подписок..." aria-label="Поиск подписок">
+                </div>
+                <button id="filter-button" class="icon-button" aria-label="Фильтры">
+                    <span class="material-icons">filter_list</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Subscriptions List -->
+        <section class="subscriptions-section" aria-label="Список подписок">
+            <div class="section-header">
+                <h2>Активные подписки</h2>
+                <button id="sort-button" class="text-button">
+                    <span class="material-icons">sort</span>
+                    Сортировать
+                </button>
+            </div>
+            
+            <div id="subscriptions-list" class="subscriptions-list">
+                <!-- Заглушка для пустого списка -->
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <span class="material-icons">subscriptions</span>
+                    </div>
+                    <h3>Нет активных подписок</h3>
+                    <p>Добавьте свою первую подписку, чтобы начать отслеживание расходов</p>
+                    <button class="primary-button" onclick="document.getElementById('add-subscription').click()">
+                        <span class="material-icons">add</span>
+                        Добавить подписку
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Add/Edit Subscription Modal -->
+    <div id="subscription-modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
+        <div class="modal-overlay" aria-hidden="true"></div>
+        <div class="modal-content">
+            <header class="modal-header">
+                <h2 id="modal-title">Добавить подписку</h2>
+                <button id="close-modal" class="icon-button" aria-label="Закрыть">
+                    <span class="material-icons">close</span>
+                </button>
+            </header>
+            
+            <form id="subscription-form" class="modal-body">
+                <div class="form-group">
+                    <label for="subscription-name">Название сервиса</label>
+                    <input type="text" id="subscription-name" name="name" required 
+                           placeholder="Netflix, Spotify, YouTube Premium...">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="subscription-price">Стоимость</label>
+                        <div class="input-with-suffix">
+                            <input type="number" id="subscription-price" name="price" 
+                                   min="0" step="0.01" required placeholder="299">
+                            <span class="input-suffix">₽</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subscription-period">Период</label>
+                        <select id="subscription-period" name="period" required>
+                            <option value="monthly">Ежемесячно</option>
+                            <option value="yearly">Ежегодно</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subscription-next-payment">Следующее списание</label>
+                    <input type="date" id="subscription-next-payment" name="nextPayment" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subscription-category">Категория</label>
+                    <select id="subscription-category" name="category">
+                        <option value="entertainment">Развлечения</option>
+                        <option value="music">Музыка</option>
+                        <option value="video">Видео</option>
+                        <option value="productivity">Продуктивность</option>
+                        <option value="cloud">Облачные сервисы</option>
+                        <option value="news">Новости</option>
+                        <option value="other">Другое</option>
+                    </select>
+                </div>
+            </form>
+            
+            <footer class="modal-footer">
+                <button type="button" id="cancel-button" class="secondary-button">Отмена</button>
+                <button type="submit" form="subscription-form" id="save-button" class="primary-button">
+                    <span class="material-icons">save</span>
+                    Сохранить
+                </button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Install Prompt -->
+    <div id="install-prompt" class="install-prompt" hidden>
+        <div class="install-content">
+            <div class="install-icon">
+                <span class="material-icons">install_mobile</span>
+            </div>
+            <div class="install-text">
+                <h3>Установить приложение</h3>
+                <p>Добавьте на главный экран для быстрого доступа</p>
+            </div>
+            <div class="install-actions">
+                <button id="install-dismiss" class="text-button">Отмена</button>
+                <button id="install-accept" class="primary-button">Установить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div id="loading" class="loading" hidden>
+        <div class="loading-spinner"></div>
+        <p>Загрузка...</p>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <!-- JavaScript Modules -->
+    <script src="/js/db.js"></script>
+    <script src="/js/ui.js"></script>
+    <script src="/js/app.js"></script>
+    
+    <!-- Chart.js для графиков -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>

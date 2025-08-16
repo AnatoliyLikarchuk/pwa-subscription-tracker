@@ -1,0 +1,533 @@
+/* ===========================
+   ТЕМЫ ОФОРМЛЕНИЯ PWA
+   =========================== */
+
+/* ===========================
+   СВЕТЛАЯ ТЕМА (по умолчанию)
+   =========================== */
+
+.theme-light {
+  /* Primary Colors */
+  --primary-color: #6200EA;
+  --primary-light: #9C4DFF;
+  --primary-dark: #3700B3;
+  --primary-variant: #3700B3;
+  
+  /* Secondary Colors */
+  --secondary-color: #03DAC6;
+  --secondary-light: #66FFF9;
+  --secondary-dark: #00A896;
+  
+  /* Surface Colors */
+  --background: #FFFFFF;
+  --surface: #FFFFFF;
+  --surface-variant: #F5F5F5;
+  --surface-container: #FAFAFA;
+  --surface-container-high: #F0F0F0;
+  
+  /* Text Colors */
+  --on-primary: #FFFFFF;
+  --on-secondary: #000000;
+  --on-background: #1C1B1F;
+  --on-surface: #1C1B1F;
+  --on-surface-variant: #49454F;
+  
+  /* Additional Colors */
+  --error: #B3261E;
+  --on-error: #FFFFFF;
+  --outline: #79747E;
+  --outline-variant: #CAC4D0;
+  --shadow: rgba(0, 0, 0, 0.12);
+  
+  /* Inverse Colors */
+  --inverse-surface: #313033;
+  --inverse-on-surface: #F4EFF4;
+  --inverse-primary: #D0BCFF;
+  
+  /* State Overlays */
+  --state-hover: rgba(98, 0, 234, 0.08);
+  --state-focus: rgba(98, 0, 234, 0.12);
+  --state-pressed: rgba(98, 0, 234, 0.12);
+  --state-dragged: rgba(98, 0, 234, 0.16);
+  
+  /* Success Color */
+  --success: #4CAF50;
+  --on-success: #FFFFFF;
+  
+  /* Warning Color */
+  --warning: #FF9800;
+  --on-warning: #000000;
+  
+  /* Info Color */
+  --info: #2196F3;
+  --on-info: #FFFFFF;
+}
+
+/* ===========================
+   ТЁМНАЯ ТЕМА
+   =========================== */
+
+.theme-dark {
+  /* Primary Colors */
+  --primary-color: #D0BCFF;
+  --primary-light: #EADDFF;
+  --primary-dark: #B794F6;
+  --primary-variant: #B794F6;
+  
+  /* Secondary Colors */
+  --secondary-color: #4DD0E1;
+  --secondary-light: #80DEEA;
+  --secondary-dark: #26C6DA;
+  
+  /* Surface Colors */
+  --background: #101014;
+  --surface: #1C1B1F;
+  --surface-variant: #2B2930;
+  --surface-container: #211F26;
+  --surface-container-high: #2B2930;
+  
+  /* Text Colors */
+  --on-primary: #371E73;
+  --on-secondary: #003738;
+  --on-background: #E6E1E5;
+  --on-surface: #E6E1E5;
+  --on-surface-variant: #CAC4D0;
+  
+  /* Additional Colors */
+  --error: #F2B8B5;
+  --on-error: #601410;
+  --outline: #938F99;
+  --outline-variant: #49454F;
+  --shadow: rgba(0, 0, 0, 0.3);
+  
+  /* Inverse Colors */
+  --inverse-surface: #E6E1E5;
+  --inverse-on-surface: #313033;
+  --inverse-primary: #6750A4;
+  
+  /* State Overlays */
+  --state-hover: rgba(208, 188, 255, 0.08);
+  --state-focus: rgba(208, 188, 255, 0.12);
+  --state-pressed: rgba(208, 188, 255, 0.12);
+  --state-dragged: rgba(208, 188, 255, 0.16);
+  
+  /* Success Color */
+  --success: #81C784;
+  --on-success: #1B5E20;
+  
+  /* Warning Color */
+  --warning: #FFB74D;
+  --on-warning: #E65100;
+  
+  /* Info Color */
+  --info: #64B5F6;
+  --on-info: #0D47A1;
+}
+
+/* ===========================
+   АВТОМАТИЧЕСКОЕ ПЕРЕКЛЮЧЕНИЕ ПО СИСТЕМНЫМ НАСТРОЙКАМ
+   =========================== */
+
+@media (prefers-color-scheme: dark) {
+  .theme-auto {
+    /* Primary Colors */
+    --primary-color: #D0BCFF;
+    --primary-light: #EADDFF;
+    --primary-dark: #B794F6;
+    --primary-variant: #B794F6;
+    
+    /* Secondary Colors */
+    --secondary-color: #4DD0E1;
+    --secondary-light: #80DEEA;
+    --secondary-dark: #26C6DA;
+    
+    /* Surface Colors */
+    --background: #101014;
+    --surface: #1C1B1F;
+    --surface-variant: #2B2930;
+    --surface-container: #211F26;
+    --surface-container-high: #2B2930;
+    
+    /* Text Colors */
+    --on-primary: #371E73;
+    --on-secondary: #003738;
+    --on-background: #E6E1E5;
+    --on-surface: #E6E1E5;
+    --on-surface-variant: #CAC4D0;
+    
+    /* Additional Colors */
+    --error: #F2B8B5;
+    --on-error: #601410;
+    --outline: #938F99;
+    --outline-variant: #49454F;
+    --shadow: rgba(0, 0, 0, 0.3);
+    
+    /* Inverse Colors */
+    --inverse-surface: #E6E1E5;
+    --inverse-on-surface: #313033;
+    --inverse-primary: #6750A4;
+    
+    /* State Overlays */
+    --state-hover: rgba(208, 188, 255, 0.08);
+    --state-focus: rgba(208, 188, 255, 0.12);
+    --state-pressed: rgba(208, 188, 255, 0.12);
+    --state-dragged: rgba(208, 188, 255, 0.16);
+    
+    /* Success Color */
+    --success: #81C784;
+    --on-success: #1B5E20;
+    
+    /* Warning Color */
+    --warning: #FFB74D;
+    --on-warning: #E65100;
+    
+    /* Info Color */
+    --info: #64B5F6;
+    --on-info: #0D47A1;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .theme-auto {
+    /* Primary Colors */
+    --primary-color: #6200EA;
+    --primary-light: #9C4DFF;
+    --primary-dark: #3700B3;
+    --primary-variant: #3700B3;
+    
+    /* Secondary Colors */
+    --secondary-color: #03DAC6;
+    --secondary-light: #66FFF9;
+    --secondary-dark: #00A896;
+    
+    /* Surface Colors */
+    --background: #FFFFFF;
+    --surface: #FFFFFF;
+    --surface-variant: #F5F5F5;
+    --surface-container: #FAFAFA;
+    --surface-container-high: #F0F0F0;
+    
+    /* Text Colors */
+    --on-primary: #FFFFFF;
+    --on-secondary: #000000;
+    --on-background: #1C1B1F;
+    --on-surface: #1C1B1F;
+    --on-surface-variant: #49454F;
+    
+    /* Additional Colors */
+    --error: #B3261E;
+    --on-error: #FFFFFF;
+    --outline: #79747E;
+    --outline-variant: #CAC4D0;
+    --shadow: rgba(0, 0, 0, 0.12);
+    
+    /* Inverse Colors */
+    --inverse-surface: #313033;
+    --inverse-on-surface: #F4EFF4;
+    --inverse-primary: #D0BCFF;
+    
+    /* State Overlays */
+    --state-hover: rgba(98, 0, 234, 0.08);
+    --state-focus: rgba(98, 0, 234, 0.12);
+    --state-pressed: rgba(98, 0, 234, 0.12);
+    --state-dragged: rgba(98, 0, 234, 0.16);
+    
+    /* Success Color */
+    --success: #4CAF50;
+    --on-success: #FFFFFF;
+    
+    /* Warning Color */
+    --warning: #FF9800;
+    --on-warning: #000000;
+    
+    /* Info Color */
+    --info: #2196F3;
+    --on-info: #FFFFFF;
+  }
+}
+
+/* ===========================
+   ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ДЛЯ ТЕМНОЙ ТЕМЫ
+   =========================== */
+
+.theme-dark .card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.theme-dark .modal-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.theme-dark .search-input-wrapper:focus-within {
+  background-color: var(--surface-variant);
+}
+
+.theme-dark .icon-button:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.theme-dark .text-button:hover:not(:disabled) {
+  background-color: var(--state-hover);
+}
+
+.theme-dark .loading {
+  background-color: rgba(16, 16, 20, 0.9);
+}
+
+/* ===========================
+   СТИЛИ ДЛЯ ПЕРЕКЛЮЧАТЕЛЯ ТЕМ
+   =========================== */
+
+.theme-toggle {
+  position: relative;
+  width: 56px;
+  height: 32px;
+  background-color: var(--outline-variant);
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+  overflow: hidden;
+}
+
+.theme-toggle::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 24px;
+  height: 24px;
+  background-color: var(--on-surface);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.theme-dark .theme-toggle {
+  background-color: var(--primary-color);
+}
+
+.theme-dark .theme-toggle::before {
+  transform: translateX(24px);
+  background-color: var(--on-primary);
+}
+
+/* ===========================
+   ИКОНКИ ДЛЯ ПЕРЕКЛЮЧАТЕЛЯ ТЕМ
+   =========================== */
+
+.theme-toggle-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: var(--on-surface-variant);
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.theme-toggle-icon.sun {
+  left: 8px;
+  opacity: 1;
+}
+
+.theme-toggle-icon.moon {
+  right: 8px;
+  opacity: 0.5;
+}
+
+.theme-dark .theme-toggle-icon.sun {
+  opacity: 0.5;
+}
+
+.theme-dark .theme-toggle-icon.moon {
+  opacity: 1;
+  color: var(--on-primary);
+}
+
+/* ===========================
+   КАТЕГОРИИ ПОДПИСОК (ЦВЕТОВОЕ КОДИРОВАНИЕ)
+   =========================== */
+
+.category-entertainment {
+  --category-color: #E91E63;
+  --category-light: #F8BBD9;
+}
+
+.category-music {
+  --category-color: #9C27B0;
+  --category-light: #E1BEE7;
+}
+
+.category-video {
+  --category-color: #F44336;
+  --category-light: #FFCDD2;
+}
+
+.category-productivity {
+  --category-color: #2196F3;
+  --category-light: #BBDEFB;
+}
+
+.category-cloud {
+  --category-color: #00BCD4;
+  --category-light: #B2EBF2;
+}
+
+.category-news {
+  --category-color: #FF9800;
+  --category-light: #FFE0B2;
+}
+
+.category-other {
+  --category-color: #607D8B;
+  --category-light: #CFD8DC;
+}
+
+.subscription-icon.category-entertainment {
+  background-color: var(--category-color);
+  color: #FFFFFF;
+}
+
+.subscription-icon.category-music {
+  background-color: var(--category-color);
+  color: #FFFFFF;
+}
+
+.subscription-icon.category-video {
+  background-color: var(--category-color);
+  color: #FFFFFF;
+}
+
+.subscription-icon.category-productivity {
+  background-color: var(--category-color);
+  color: #FFFFFF;
+}
+
+.subscription-icon.category-cloud {
+  background-color: var(--category-color);
+  color: #FFFFFF;
+}
+
+.subscription-icon.category-news {
+  background-color: var(--category-color);
+  color: #FFFFFF;
+}
+
+.subscription-icon.category-other {
+  background-color: var(--category-color);
+  color: #FFFFFF;
+}
+
+/* ===========================
+   СТАТУСЫ ПОДПИСОК
+   =========================== */
+
+.subscription-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+}
+
+.subscription-status.active {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: var(--success);
+}
+
+.subscription-status.inactive {
+  background-color: rgba(158, 158, 158, 0.1);
+  color: var(--on-surface-variant);
+}
+
+.subscription-status.overdue {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: var(--error);
+}
+
+/* ===========================
+   ПЛАВНЫЕ ПЕРЕХОДЫ МЕЖДУ ТЕМАМИ
+   =========================== */
+
+*,
+*::before,
+*::after {
+  transition: background-color 0.3s ease, 
+              color 0.3s ease, 
+              border-color 0.3s ease, 
+              box-shadow 0.3s ease;
+}
+
+/* Исключения для анимированных элементов */
+.loading-spinner,
+.toast,
+.modal-content {
+  transition: background-color 0.3s ease, 
+              color 0.3s ease, 
+              border-color 0.3s ease, 
+              box-shadow 0.3s ease,
+              transform 0.3s ease,
+              opacity 0.3s ease;
+}
+
+/* ===========================
+   УЛУЧШЕННАЯ ДОСТУПНОСТЬ ДЛЯ РАЗНЫХ ТЕМ
+   =========================== */
+
+@media (prefers-contrast: high) {
+  .theme-light {
+    --outline: #000000;
+    --outline-variant: #666666;
+  }
+  
+  .theme-dark {
+    --outline: #FFFFFF;
+    --outline-variant: #CCCCCC;
+  }
+}
+
+/* ===========================
+   КАСТОМНЫЕ СКРОЛЛБАРЫ ДЛЯ РАЗНЫХ ТЕМ
+   =========================== */
+
+.theme-light ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.theme-light ::-webkit-scrollbar-track {
+  background: var(--surface-variant);
+  border-radius: 4px;
+}
+
+.theme-light ::-webkit-scrollbar-thumb {
+  background: var(--outline-variant);
+  border-radius: 4px;
+}
+
+.theme-light ::-webkit-scrollbar-thumb:hover {
+  background: var(--outline);
+}
+
+.theme-dark ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.theme-dark ::-webkit-scrollbar-track {
+  background: var(--surface-variant);
+  border-radius: 4px;
+}
+
+.theme-dark ::-webkit-scrollbar-thumb {
+  background: var(--outline-variant);
+  border-radius: 4px;
+}
+
+.theme-dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--outline);
+}

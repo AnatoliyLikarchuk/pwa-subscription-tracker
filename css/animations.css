@@ -1,0 +1,626 @@
+/* ===========================
+   АНИМАЦИИ И ПЕРЕХОДЫ PWA
+   =========================== */
+
+/* ===========================
+   БАЗОВЫЕ АНИМАЦИИ
+   =========================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40%, 43% {
+    transform: translate3d(0, -30px, 0);
+  }
+  70% {
+    transform: translate3d(0, -15px, 0);
+  }
+  90% {
+    transform: translate3d(0, -4px, 0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ===========================
+   СЛОЖНЫЕ АНИМАЦИИ
+   =========================== */
+
+@keyframes modalSlideIn {
+  from {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes modalSlideOut {
+  from {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+  }
+}
+
+@keyframes toastSlideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toastSlideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes cardHover {
+  from {
+    transform: translateY(0);
+    box-shadow: var(--elevation-1);
+  }
+  to {
+    transform: translateY(-2px);
+    box-shadow: var(--elevation-2);
+  }
+}
+
+@keyframes buttonPress {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes loadingDots {
+  0%, 80%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===========================
+   КЛАССЫ АНИМАЦИЙ
+   =========================== */
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-fade-out {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.4s ease-out forwards;
+}
+
+.animate-slide-in-down {
+  animation: slideInDown 0.4s ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.4s ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.4s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s ease-out forwards;
+}
+
+.animate-scale-out {
+  animation: scaleOut 0.3s ease-out forwards;
+}
+
+.animate-bounce {
+  animation: bounce 1s ease-in-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* ===========================
+   АНИМАЦИИ ДЛЯ КОМПОНЕНТОВ
+   =========================== */
+
+/* Анимации для карточек подписок */
+.subscription-card {
+  transition: all 0.3s ease;
+}
+
+.subscription-card:hover {
+  animation: cardHover 0.3s ease-out forwards;
+}
+
+.subscription-card.entering {
+  animation: slideInUp 0.4s ease-out forwards;
+}
+
+.subscription-card.leaving {
+  animation: slideInDown 0.3s ease-out forwards;
+  opacity: 0;
+}
+
+/* Анимации для кнопок */
+.button-base {
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.button-base:active {
+  animation: buttonPress 0.1s ease-out;
+}
+
+.button-base::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.button-base:active::before {
+  width: 300px;
+  height: 300px;
+  animation: ripple 0.6s ease-out;
+}
+
+/* Анимации для модальных окон */
+.modal {
+  transition: all 0.3s ease;
+}
+
+.modal.active .modal-content {
+  animation: modalSlideIn 0.4s ease-out forwards;
+}
+
+.modal.closing .modal-content {
+  animation: modalSlideOut 0.3s ease-out forwards;
+}
+
+/* Анимации для toast уведомлений */
+.toast {
+  animation: toastSlideIn 0.4s ease-out forwards;
+}
+
+.toast.removing {
+  animation: toastSlideOut 0.3s ease-out forwards;
+}
+
+/* Анимации для статистических карточек */
+.stat-card {
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--elevation-2);
+}
+
+.stat-value {
+  transition: all 0.3s ease;
+}
+
+.stat-value.updating {
+  animation: pulse 0.6s ease-in-out;
+}
+
+/* Анимации для поиска */
+.search-input-wrapper {
+  transition: all 0.3s ease;
+}
+
+.search-input-wrapper:focus-within {
+  animation: scaleIn 0.3s ease-out;
+}
+
+/* Анимации для переключателя тем */
+.theme-toggle {
+  transition: all 0.3s ease;
+}
+
+.theme-toggle::before {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+}
+
+/* ===========================
+   АНИМАЦИИ ЗАГРУЗКИ
+   =========================== */
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+.loading-dots {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.loading-dots .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  animation: loadingDots 1.4s ease-in-out infinite;
+}
+
+.loading-dots .dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dots .dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* ===========================
+   АНИМАЦИИ ГРАФИКОВ
+   =========================== */
+
+.chart-container {
+  opacity: 0;
+  animation: fadeIn 0.8s ease-out 0.2s forwards;
+}
+
+.chart-container.updating {
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+/* ===========================
+   АНИМАЦИИ ПРИ ПОЯВЛЕНИИ ЭЛЕМЕНТОВ
+   =========================== */
+
+.dashboard {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.stats-grid .stat-card:nth-child(1) {
+  animation: slideInUp 0.5s ease-out 0.1s both;
+}
+
+.stats-grid .stat-card:nth-child(2) {
+  animation: slideInUp 0.5s ease-out 0.2s both;
+}
+
+.stats-grid .stat-card:nth-child(3) {
+  animation: slideInUp 0.5s ease-out 0.3s both;
+}
+
+.search-section {
+  animation: slideInDown 0.5s ease-out 0.4s both;
+}
+
+.subscriptions-section {
+  animation: slideInUp 0.5s ease-out 0.5s both;
+}
+
+/* ===========================
+   АНИМАЦИИ ДЛЯ PWA УСТАНОВКИ
+   =========================== */
+
+.install-prompt {
+  animation: slideInUp 0.4s ease-out forwards;
+}
+
+.install-prompt.hiding {
+  animation: slideInDown 0.3s ease-out forwards;
+}
+
+/* ===========================
+   АНИМАЦИИ ДЛЯ ПУСТОГО СОСТОЯНИЯ
+   =========================== */
+
+.empty-state {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.empty-icon {
+  animation: bounce 2s ease-in-out infinite;
+}
+
+/* ===========================
+   HOVER ЭФФЕКТЫ
+   =========================== */
+
+.subscription-icon {
+  transition: all 0.3s ease;
+}
+
+.subscription-icon:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.icon-button {
+  transition: all 0.2s ease;
+}
+
+.icon-button:hover {
+  transform: scale(1.1);
+}
+
+.stat-icon {
+  transition: all 0.3s ease;
+}
+
+.stat-icon:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+/* ===========================
+   АНИМАЦИИ ДЛЯ ФОРМ
+   =========================== */
+
+.form-group input:focus,
+.form-group select:focus {
+  transition: all 0.3s ease;
+  transform: scale(1.02);
+}
+
+.form-group label {
+  transition: all 0.3s ease;
+}
+
+.form-group:focus-within label {
+  transform: translateY(-2px);
+  color: var(--primary-color);
+}
+
+/* ===========================
+   АНИМАЦИИ ДЛЯ СОСТОЯНИЙ
+   =========================== */
+
+.subscription-status {
+  transition: all 0.3s ease;
+}
+
+.subscription-status.active {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.subscription-status.overdue {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* ===========================
+   МИКРОИНТЕРАКЦИИ
+   =========================== */
+
+.material-icons {
+  transition: all 0.2s ease;
+}
+
+.button-base:hover .material-icons {
+  transform: scale(1.1);
+}
+
+.search-input-wrapper .material-icons {
+  transition: all 0.3s ease;
+}
+
+.search-input-wrapper:focus-within .material-icons {
+  color: var(--primary-color);
+  transform: scale(1.1);
+}
+
+/* ===========================
+   АДАПТИВНЫЕ АНИМАЦИИ
+   =========================== */
+
+@media (max-width: 768px) {
+  /* Упрощённые анимации для мобильных */
+  .subscription-card:hover {
+    animation: none;
+    transform: none;
+  }
+  
+  .stat-card:hover {
+    transform: none;
+  }
+  
+  .icon-button:hover {
+    transform: none;
+  }
+}
+
+/* ===========================
+   ОТКЛЮЧЕНИЕ АНИМАЦИЙ ДЛЯ ACCESSIBILITY
+   =========================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .loading-spinner {
+    animation: none;
+    border-top-color: transparent;
+  }
+  
+  .animate-pulse {
+    animation: none;
+  }
+  
+  .animate-bounce {
+    animation: none;
+  }
+}
