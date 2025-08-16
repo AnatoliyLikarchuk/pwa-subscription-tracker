@@ -116,7 +116,7 @@
                     </div>
                     <h3>Нет активных подписок</h3>
                     <p>Добавьте свою первую подписку, чтобы начать отслеживание расходов</p>
-                    <button class="primary-button" onclick="document.getElementById('add-subscription').click()">
+                    <button class="primary-button" id="fallback-add-button">
                         <span class="material-icons">add</span>
                         Добавить подписку
                     </button>
@@ -240,22 +240,44 @@
             const loading = document.getElementById('loading');
             if (loading && !loading.hidden) {
                 loading.hidden = true;
-                document.body.innerHTML += `
-                    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-                                background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000;">
-                        <h2>Ошибка загрузки</h2>
-                        <p>Произошла ошибка при загрузке приложения.</p>
-                        <button onclick="window.location.reload()" style="background: #6200EA; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
-                            Перезагрузить
-                        </button>
-                    </div>
-                `;
+                
+                const errorModal = document.createElement('div');
+                errorModal.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000;';
+                
+                const title = document.createElement('h2');
+                title.textContent = 'Ошибка загрузки';
+                
+                const message = document.createElement('p');
+                message.textContent = 'Произошла ошибка при загрузке приложения.';
+                
+                const reloadBtn = document.createElement('button');
+                reloadBtn.style.cssText = 'background: #6200EA; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;';
+                reloadBtn.textContent = 'Перезагрузить';
+                reloadBtn.addEventListener('click', () => window.location.reload());
+                
+                errorModal.appendChild(title);
+                errorModal.appendChild(message);
+                errorModal.appendChild(reloadBtn);
+                
+                document.body.appendChild(errorModal);
             }
         });
         
         // Ожидание загрузки DOM
         document.addEventListener('DOMContentLoaded', () => {
             console.log('DOM загружен, инициализация приложения...');
+            
+            // Обработчик для fallback кнопки добавления подписки
+            const fallbackBtn = document.getElementById('fallback-add-button');
+            if (fallbackBtn) {
+                fallbackBtn.addEventListener('click', () => {
+                    const addBtn = document.getElementById('add-subscription');
+                    if (addBtn) {
+                        addBtn.click();
+                    }
+                });
+            }
+            
             setTimeout(() => {
                 if (window.subscriptionDB && window.subscriptionUI && window.SubscriptionApp) {
                     console.log('Все компоненты загружены');

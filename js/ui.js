@@ -5,7 +5,7 @@
 
 class SubscriptionUI {
   constructor() {
-    console.log('Инициализация SubscriptionUI...');
+    // Инициализация SubscriptionUI
     
     this.currentSubscription = null;
     this.isEditMode = false;
@@ -22,7 +22,7 @@ class SubscriptionUI {
   }
   
   initialize() {
-    console.log('Инициализация элементов UI...');
+    // Инициализация элементов UI
     
     try {
       this.initializeElements();
@@ -42,7 +42,7 @@ class SubscriptionUI {
   // ===========================
 
   initializeElements() {
-    console.log('Инициализация элементов DOM...');
+    // Инициализация элементов DOM
     
     try {
       // Основные элементы
@@ -84,8 +84,6 @@ class SubscriptionUI {
       const missingElements = criticalElements.filter(id => !document.getElementById(id));
       if (missingElements.length > 0) {
         console.error('Критически важные элементы не найдены:', missingElements);
-      } else {
-        console.log('Все критически важные элементы найдены');
       }
     } catch (error) {
       console.error('Ошибка при инициализации элементов:', error);
@@ -134,7 +132,6 @@ class SubscriptionUI {
   // ===========================
 
   loadInitialData() {
-    console.log('Начата загрузка начальных данных');
     this.showLoading(true);
     
     try {
@@ -143,21 +140,13 @@ class SubscriptionUI {
         throw new Error('subscriptionDB не доступен');
       }
       
-      console.log('Обновление статистики...');
       this.updateStatistics();
-      
-      console.log('Отображение подписок...');
       this.renderSubscriptions();
-      
-      console.log('Загрузка темы...');
       this.loadTheme();
-      
-      console.log('Начальные данные успешно загружены');
     } catch (error) {
       console.error('Ошибка загрузки данных:', error);
       this.showToast({ type: 'error', message: 'Ошибка загрузки данных: ' + error.message });
     } finally {
-      console.log('Скрытие экрана загрузки');
       this.showLoading(false);
     }
   }
@@ -224,19 +213,53 @@ class SubscriptionUI {
         <small>/${subscription.period === 'monthly' ? 'мес' : 'год'}</small>
       </div>
       <div class="subscription-actions">
-        <button class="icon-button" onclick="subscriptionUI.editSubscription('${subscription.id}')" aria-label="Редактировать">
+        <button class="icon-button edit-btn" data-id="${this.escapeHtml(subscription.id)}" aria-label="Редактировать">
           <span class="material-icons">edit</span>
         </button>
-        <button class="icon-button" onclick="subscriptionUI.toggleSubscriptionActive('${subscription.id}')" aria-label="Архивировать">
+        <button class="icon-button toggle-btn" data-id="${this.escapeHtml(subscription.id)}" aria-label="Архивировать">
           <span class="material-icons">${subscription.active ? 'archive' : 'unarchive'}</span>
         </button>
-        <button class="icon-button" onclick="subscriptionUI.deleteSubscription('${subscription.id}')" aria-label="Удалить">
+        <button class="icon-button delete-btn" data-id="${this.escapeHtml(subscription.id)}" aria-label="Удалить">
           <span class="material-icons">delete</span>
         </button>
       </div>
     `;
     
+    // Добавляем безопасные обработчики событий
+    this.setupSubscriptionCardEvents(div, subscription.id);
+    
     return div;
+  }
+
+  setupSubscriptionCardEvents(cardElement, subscriptionId) {
+    // Безопасная обработка событий без использования onclick в innerHTML
+    const editBtn = cardElement.querySelector('.edit-btn');
+    const toggleBtn = cardElement.querySelector('.toggle-btn');
+    const deleteBtn = cardElement.querySelector('.delete-btn');
+    
+    if (editBtn) {
+      editBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.editSubscription(subscriptionId);
+      });
+    }
+    
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.toggleSubscriptionActive(subscriptionId);
+      });
+    }
+    
+    if (deleteBtn) {
+      deleteBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.deleteSubscription(subscriptionId);
+      });
+    }
   }
 
   showEmptyState() {
@@ -247,12 +270,18 @@ class SubscriptionUI {
         </div>
         <h3>Нет активных подписок</h3>
         <p>Добавьте свою первую подписку, чтобы начать отслеживание расходов</p>
-        <button class="primary-button" onclick="subscriptionUI.openModal()">
+        <button class="primary-button empty-add-btn">
           <span class="material-icons">add</span>
           Добавить подписку
         </button>
       </div>
     `;
+    
+    // Безопасная обработка события для кнопки в пустом состоянии
+    const addBtn = this.subscriptionsList.querySelector('.empty-add-btn');
+    if (addBtn) {
+      addBtn.addEventListener('click', () => this.openModal());
+    }
   }
 
   animateSubscriptionCards() {
@@ -351,12 +380,30 @@ class SubscriptionUI {
   }
 
   fillForm(subscription) {
-    this.nameInput.value = subscription.name;
-    this.priceInput.value = subscription.price;
-    this.currencySelect.value = subscription.currency || 'UAH';
-    this.periodSelect.value = subscription.period;
-    this.nextPaymentInput.value = subscription.nextPayment;
-    this.categorySelect.value = subscription.category;
+    if (!subscription) {
+      console.error('fillForm: подписка не передана');
+      return;
+    }
+    
+    // Безопасное заполнение формы с проверками существования элементов
+    if (this.nameInput) {
+      this.nameInput.value = subscription.name || '';
+    }
+    if (this.priceInput) {
+      this.priceInput.value = subscription.price || '';
+    }
+    if (this.currencySelect) {
+      this.currencySelect.value = subscription.currency || 'UAH';
+    }
+    if (this.periodSelect) {
+      this.periodSelect.value = subscription.period || 'monthly';
+    }
+    if (this.nextPaymentInput) {
+      this.nextPaymentInput.value = subscription.nextPayment || '';
+    }
+    if (this.categorySelect) {
+      this.categorySelect.value = subscription.category || 'other';
+    }
   }
 
   resetForm() {
@@ -431,21 +478,76 @@ class SubscriptionUI {
   }
 
   validateSubscriptionData(data) {
-    if (!data.name) {
+    // Проверка названия
+    if (!data.name || typeof data.name !== 'string' || data.name.trim().length === 0) {
       this.showToast({ type: 'error', message: 'Введите название подписки' });
       this.nameInput?.focus();
       return false;
     }
     
-    if (!data.price || data.price <= 0) {
-      this.showToast({ type: 'error', message: 'Введите корректную стоимость' });
+    if (data.name.trim().length > 100) {
+      this.showToast({ type: 'error', message: 'Название слишком длинное (максимум 100 символов)' });
+      this.nameInput?.focus();
+      return false;
+    }
+    
+    // Проверка стоимости
+    if (!data.price || typeof data.price !== 'number' || isNaN(data.price) || data.price <= 0) {
+      this.showToast({ type: 'error', message: 'Введите корректную стоимость (больше 0)' });
       this.priceInput?.focus();
       return false;
     }
     
+    if (data.price > 1000000) {
+      this.showToast({ type: 'error', message: 'Стоимость слишком большая (максимум 1,000,000)' });
+      this.priceInput?.focus();
+      return false;
+    }
+    
+    // Проверка валюты
+    const allowedCurrencies = ['UAH', 'USD'];
+    if (!data.currency || !allowedCurrencies.includes(data.currency)) {
+      this.showToast({ type: 'error', message: 'Выберите корректную валюту' });
+      this.currencySelect?.focus();
+      return false;
+    }
+    
+    // Проверка периода
+    const allowedPeriods = ['monthly', 'yearly'];
+    if (!data.period || !allowedPeriods.includes(data.period)) {
+      this.showToast({ type: 'error', message: 'Выберите корректный период оплаты' });
+      this.periodSelect?.focus();
+      return false;
+    }
+    
+    // Проверка даты
     if (!data.nextPayment) {
       this.showToast({ type: 'error', message: 'Выберите дату следующего платежа' });
       this.nextPaymentInput?.focus();
+      return false;
+    }
+    
+    const paymentDate = new Date(data.nextPayment);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    if (isNaN(paymentDate.getTime())) {
+      this.showToast({ type: 'error', message: 'Введите корректную дату' });
+      this.nextPaymentInput?.focus();
+      return false;
+    }
+    
+    if (paymentDate < today) {
+      this.showToast({ type: 'error', message: 'Дата платежа не может быть в прошлом' });
+      this.nextPaymentInput?.focus();
+      return false;
+    }
+    
+    // Проверка категории
+    const allowedCategories = ['entertainment', 'music', 'video', 'productivity', 'cloud', 'news', 'other'];
+    if (!data.category || !allowedCategories.includes(data.category)) {
+      this.showToast({ type: 'error', message: 'Выберите корректную категорию' });
+      this.categorySelect?.focus();
       return false;
     }
     
@@ -561,20 +663,15 @@ class SubscriptionUI {
   // ===========================
 
   showLoading(show) {
-    console.log('showLoading вызван:', show);
-    
-    // Находим элемент загрузки
     const loadingElement = this.loadingElement || document.getElementById('loading');
     
     if (loadingElement) {
       if (show) {
         loadingElement.hidden = false;
         loadingElement.style.display = 'flex';
-        console.log('Показан экран загрузки');
       } else {
         loadingElement.hidden = true;
         loadingElement.style.display = 'none';
-        console.log('Скрыт экран загрузки');
       }
     } else {
       console.warn('Элемент loading не найден');
@@ -676,7 +773,6 @@ let subscriptionUI = null;
 
 function initializeSubscriptionUI() {
   if (!subscriptionUI) {
-    console.log('Создание экземпляра SubscriptionUI...');
     subscriptionUI = new SubscriptionUI();
     window.subscriptionUI = subscriptionUI;
   }

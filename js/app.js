@@ -17,18 +17,18 @@ class SubscriptionApp {
   // ===========================
 
   async init() {
-    console.log('Инициализация SubscriptionApp...');
+    // Инициализация SubscriptionApp
     
     try {
       // Проверяем готовность DOM
       if (document.readyState === 'loading') {
-        console.log('Ожидание готовности DOM...');
+        // Ожидание готовности DOM
         await new Promise(resolve => {
           document.addEventListener('DOMContentLoaded', resolve);
         });
       }
       
-      console.log('DOM готов, начинаем инициализацию компонентов...');
+      // DOM готов, начинаем инициализацию компонентов
       
       // Инициализация базовых компонентов
       this.initializeServiceWorker();
@@ -42,7 +42,7 @@ class SubscriptionApp {
       // Проверка обновлений
       this.checkForUpdates();
       
-      console.log('Инициализация SubscriptionApp завершена');
+      // Инициализация завершена
       
     } catch (error) {
       console.error('Ошибка инициализации приложения:', error);
@@ -58,7 +58,7 @@ class SubscriptionApp {
     if ('serviceWorker' in navigator) {
       try {
         this.swRegistration = await navigator.serviceWorker.register('/service-worker.js');
-        console.log('Service Worker зарегистрирован:', this.swRegistration);
+        // Service Worker зарегистрирован
         
         // Обработка обновлений Service Worker
         this.swRegistration.addEventListener('updatefound', () => {
@@ -89,17 +89,27 @@ class SubscriptionApp {
   showUpdateAvailable() {
     const updateBanner = document.createElement('div');
     updateBanner.className = 'update-banner';
-    updateBanner.innerHTML = `
-      <div class="update-content">
-        <span>Доступно обновление приложения</span>
-        <button class="primary-button" onclick="subscriptionApp.applyUpdate()">
-          Обновить
-        </button>
-        <button class="text-button" onclick="this.parentElement.parentElement.remove()">
-          Позже
-        </button>
-      </div>
-    `;
+    
+    const content = document.createElement('div');
+    content.className = 'update-content';
+    
+    const message = document.createElement('span');
+    message.textContent = 'Доступно обновление приложения';
+    
+    const updateBtn = document.createElement('button');
+    updateBtn.className = 'primary-button';
+    updateBtn.textContent = 'Обновить';
+    updateBtn.addEventListener('click', () => this.applyUpdate());
+    
+    const laterBtn = document.createElement('button');
+    laterBtn.className = 'text-button';
+    laterBtn.textContent = 'Позже';
+    laterBtn.addEventListener('click', () => updateBanner.remove());
+    
+    content.appendChild(message);
+    content.appendChild(updateBtn);
+    content.appendChild(laterBtn);
+    updateBanner.appendChild(content);
     
     document.body.appendChild(updateBanner);
   }
@@ -539,24 +549,42 @@ class SubscriptionApp {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     `;
     
-    errorDiv.innerHTML = `
-      <div style="background: #1e1e1e; padding: 2rem; border-radius: 8px; max-width: 400px; text-align: center;">
-        <h2 style="color: #ff4757; margin: 0 0 1rem 0;">Произошла ошибка</h2>
-        <p style="margin: 0 0 1rem 0; color: #ccc;">Приложение не может запуститься корректно.</p>
-        <details style="margin: 1rem 0; text-align: left;">
-          <summary style="cursor: pointer; color: #ffa502;">Подробности ошибки</summary>
-          <pre style="font-size: 0.8rem; background: #2d2d2d; padding: 1rem; border-radius: 4px; overflow: auto; margin-top: 0.5rem;">
-${error.message}
-${error.stack || ''}
-          </pre>
-        </details>
-        <button onclick="window.location.reload()" 
-                style="background: #6200EA; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 1rem;">
-          Перезагрузить
-        </button>
-      </div>
-    `;
+    const errorContainer = document.createElement('div');
+    errorContainer.style.cssText = 'background: #1e1e1e; padding: 2rem; border-radius: 8px; max-width: 400px; text-align: center;';
     
+    const title = document.createElement('h2');
+    title.style.cssText = 'color: #ff4757; margin: 0 0 1rem 0;';
+    title.textContent = 'Произошла ошибка';
+    
+    const description = document.createElement('p');
+    description.style.cssText = 'margin: 0 0 1rem 0; color: #ccc;';
+    description.textContent = 'Приложение не может запуститься корректно.';
+    
+    const details = document.createElement('details');
+    details.style.cssText = 'margin: 1rem 0; text-align: left;';
+    
+    const summary = document.createElement('summary');
+    summary.style.cssText = 'cursor: pointer; color: #ffa502;';
+    summary.textContent = 'Подробности ошибки';
+    
+    const pre = document.createElement('pre');
+    pre.style.cssText = 'font-size: 0.8rem; background: #2d2d2d; padding: 1rem; border-radius: 4px; overflow: auto; margin-top: 0.5rem;';
+    pre.textContent = `${error.message}\n${error.stack || ''}`;
+    
+    const reloadBtn = document.createElement('button');
+    reloadBtn.style.cssText = 'background: #6200EA; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 1rem;';
+    reloadBtn.textContent = 'Перезагрузить';
+    reloadBtn.addEventListener('click', () => window.location.reload());
+    
+    details.appendChild(summary);
+    details.appendChild(pre);
+    
+    errorContainer.appendChild(title);
+    errorContainer.appendChild(description);
+    errorContainer.appendChild(details);
+    errorContainer.appendChild(reloadBtn);
+    
+    errorDiv.appendChild(errorContainer);
     document.body.appendChild(errorDiv);
   }
 

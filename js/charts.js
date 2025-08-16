@@ -136,22 +136,37 @@ class SubscriptionCharts {
   createChartContainer(id, title) {
     const container = document.createElement('div');
     container.className = 'chart-container';
-    container.innerHTML = `
-      <h3 class="chart-title">${title}</h3>
-      <div class="chart-wrapper">
-        <canvas id="${id}"></canvas>
-      </div>
-      <div class="chart-controls">
-        <button class="text-button" onclick="subscriptionCharts.toggleChartType('${id}')">
-          <span class="material-icons">bar_chart</span>
-          Изменить тип
-        </button>
-        <button class="text-button" onclick="subscriptionCharts.exportChart('${id}')">
-          <span class="material-icons">download</span>
-          Скачать
-        </button>
-      </div>
-    `;
+    
+    const titleElement = document.createElement('h3');
+    titleElement.className = 'chart-title';
+    titleElement.textContent = title;
+    
+    const wrapper = document.createElement('div');
+    wrapper.className = 'chart-wrapper';
+    
+    const canvas = document.createElement('canvas');
+    canvas.id = id;
+    
+    const controls = document.createElement('div');
+    controls.className = 'chart-controls';
+    
+    const toggleBtn = document.createElement('button');
+    toggleBtn.className = 'text-button';
+    toggleBtn.innerHTML = '<span class="material-icons">bar_chart</span> Изменить тип';
+    toggleBtn.addEventListener('click', () => this.toggleChartType(id));
+    
+    const exportBtn = document.createElement('button');
+    exportBtn.className = 'text-button';
+    exportBtn.innerHTML = '<span class="material-icons">download</span> Скачать';
+    exportBtn.addEventListener('click', () => this.exportChart(id));
+    
+    wrapper.appendChild(canvas);
+    controls.appendChild(toggleBtn);
+    controls.appendChild(exportBtn);
+    
+    container.appendChild(titleElement);
+    container.appendChild(wrapper);
+    container.appendChild(controls);
     
     return container;
   }
