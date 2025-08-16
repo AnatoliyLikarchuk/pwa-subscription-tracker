@@ -17,7 +17,19 @@ class SubscriptionApp {
   // ===========================
 
   async init() {
+    console.log('Инициализация SubscriptionApp...');
+    
     try {
+      // Проверяем готовность DOM
+      if (document.readyState === 'loading') {
+        console.log('Ожидание готовности DOM...');
+        await new Promise(resolve => {
+          document.addEventListener('DOMContentLoaded', resolve);
+        });
+      }
+      
+      console.log('DOM готов, начинаем инициализацию компонентов...');
+      
       // Инициализация базовых компонентов
       this.initializeServiceWorker();
       this.initializeEventListeners();
@@ -29,6 +41,8 @@ class SubscriptionApp {
       
       // Проверка обновлений
       this.checkForUpdates();
+      
+      console.log('Инициализация SubscriptionApp завершена');
       
     } catch (error) {
       console.error('Ошибка инициализации приложения:', error);
@@ -471,27 +485,73 @@ class SubscriptionApp {
   showAppReady() {
     console.log('PWA приложение готово к работе');
     
-    // Показать сообщение только при первом запуске
-    if (!subscriptionDB.getSetting('appLaunched')) {
-      subscriptionUI.showToast({
-        type: 'success',
-        message: 'Добро пожаловать в приложение для учёта подписок!'
-      });
+    try {
+      // Проверяем доступность необходимых компонентов
+      if (!window.subscriptionDB) {
+        console.error('subscriptionDB не доступен при показе готовности приложения');
+        return;
+      }
       
-      subscriptionDB.setSetting('appLaunched', true);
+      if (!window.subscriptionUI) {
+        console.error('subscriptionUI не доступен при показе готовности приложения');
+        return;
+      }
+      
+      // Показать сообщение только при первом запуске
+      if (!subscriptionDB.getSetting('appLaunched')) {
+        subscriptionUI.showToast({
+          type: 'success',
+          message: 'Добро пожаловать в приложение для учёта подписок!'
+        });
+        
+        subscriptionDB.setSetting('appLaunched', true);
+      }
+      
+      console.log('Приложение полностью готово к использованию');
+    } catch (error) {
+      console.error('Ошибка при показе готовности приложения:', error);
     }
   }
 
   handleCriticalError(error) {
     console.error('Критическая ошибка приложения:', error);
     
+    // Скрываем экран загрузки если он есть
+    const loading = document.getElementById('loading');
+    if (loading) {
+      loading.hidden = true;
+    }
+    
     const errorDiv = document.createElement('div');
     errorDiv.className = 'critical-error';
+    errorDiv.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      color: white;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    `;
+    
     errorDiv.innerHTML = `
-      <div class="error-content">
-        <h2>Произошла ошибка</h2>
-        <p>Приложение не может запуститься корректно.</p>
-        <button onclick="window.location.reload()" class="primary-button">
+      <div style="background: #1e1e1e; padding: 2rem; border-radius: 8px; max-width: 400px; text-align: center;">
+        <h2 style="color: #ff4757; margin: 0 0 1rem 0;">Произошла ошибка</h2>
+        <p style="margin: 0 0 1rem 0; color: #ccc;">Приложение не может запуститься корректно.</p>
+        <details style="margin: 1rem 0; text-align: left;">
+          <summary style="cursor: pointer; color: #ffa502;">Подробности ошибки</summary>
+          <pre style="font-size: 0.8rem; background: #2d2d2d; padding: 1rem; border-radius: 4px; overflow: auto; margin-top: 0.5rem;">
+${error.message}
+${error.stack || ''}
+          </pre>
+        </details>
+        <button onclick="window.location.reload()" 
+                style="background: #6200EA; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 1rem;">
           Перезагрузить
         </button>
       </div>
@@ -607,14 +667,54 @@ class SubscriptionApp {
 // ===========================
 
 // Создать экземпляр приложения при загрузке DOM
-let subscriptionApp;
+let subscriptionApp = null;
+
+function initializeSubscriptionApp() {
+  if (!subscriptionApp) {
+    console.log('Создание экземпляра SubscriptionApp...');
+    
+    // Ждем пока загрузятся все необходимые компоненты
+    const checkDependencies = () => {
+      if (window.subscriptionDB && window.subscriptionUI) {
+        console.log('Все зависимости загружены, создаем SubscriptionApp');
+        subscriptionApp = new SubscriptionApp();
+        window.subscriptionApp = subscriptionApp;
+        return true;
+      }
+      return false;
+    };
+    
+    // Проверяем немедленно
+    if (!checkDependencies()) {
+      console.log('Ожидание загрузки зависимостей...');
+      
+      // Проверяем каждые 50мс до 5 секунд
+      let attempts = 0;
+      const maxAttempts = 100; // 5 секунд
+      
+      const checkInterval = setInterval(() => {
+        attempts++;
+        
+        if (checkDependencies()) {
+          clearInterval(checkInterval);
+        } else if (attempts >= maxAttempts) {
+          clearInterval(checkInterval);
+          console.error('Не удалось дождаться загрузки всех зависимостей');
+          
+          // Пытаемся создать приложение принудительно
+          subscriptionApp = new SubscriptionApp();
+          window.subscriptionApp = subscriptionApp;
+        }
+      }, 50);
+    }
+  }
+  return subscriptionApp;
+}
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    subscriptionApp = new SubscriptionApp();
-  });
+  document.addEventListener('DOMContentLoaded', initializeSubscriptionApp);
 } else {
-  subscriptionApp = new SubscriptionApp();
+  initializeSubscriptionApp();
 }
 
 // Экспорт для использования в других модулях

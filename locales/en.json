@@ -233,9 +233,7 @@
     "nextMonth": "next month"
   },
   "currency": {
-    "rub": "₽",
     "usd": "$",
-    "eur": "€",
     "uah": "₴"
   },
   "meta": {

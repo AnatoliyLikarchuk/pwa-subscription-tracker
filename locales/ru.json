@@ -188,7 +188,7 @@
     "changeType": "Изменить тип",
     "download": "Скачать",
     "percentage": "{{value}}%",
-    "currency": "{{value}} ₽"
+    "currency": "{{value}}"
   },
   "search": {
     "placeholder": "Поиск...",
@@ -233,9 +233,7 @@
     "nextMonth": "в следующем месяце"
   },
   "currency": {
-    "rub": "₽",
     "usd": "$",
-    "eur": "€",
     "uah": "₴"
   },
   "meta": {

@@ -5,15 +5,36 @@
 
 class SubscriptionUI {
   constructor() {
+    console.log('Инициализация SubscriptionUI...');
+    
     this.currentSubscription = null;
     this.isEditMode = false;
     this.searchQuery = '';
     this.currentSort = { field: 'name', order: 'asc' };
     this.currentFilter = { active: true, category: null };
     
-    this.initializeElements();
-    this.bindEvents();
-    this.loadInitialData();
+    // Ожидаем готовности DOM
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => this.initialize());
+    } else {
+      this.initialize();
+    }
+  }
+  
+  initialize() {
+    console.log('Инициализация элементов UI...');
+    
+    try {
+      this.initializeElements();
+      this.bindEvents();
+      
+      // Даем время на загрузку других модулей
+      setTimeout(() => {
+        this.loadInitialData();
+      }, 50);
+    } catch (error) {
+      console.error('Ошибка инициализации UI:', error);
+    }
   }
 
   // ===========================
@@ -21,35 +42,54 @@ class SubscriptionUI {
   // ===========================
 
   initializeElements() {
-    // Основные элементы
-    this.subscriptionsList = document.getElementById('subscriptions-list');
-    this.modal = document.getElementById('subscription-modal');
-    this.modalTitle = document.getElementById('modal-title');
-    this.subscriptionForm = document.getElementById('subscription-form');
-    this.searchInput = document.getElementById('search-input');
-    this.toastContainer = document.getElementById('toast-container');
-    this.loadingElement = document.getElementById('loading');
+    console.log('Инициализация элементов DOM...');
     
-    // Кнопки
-    this.addButton = document.getElementById('add-subscription');
-    this.closeModalButton = document.getElementById('close-modal');
-    this.cancelButton = document.getElementById('cancel-button');
-    this.saveButton = document.getElementById('save-button');
-    this.themeToggle = document.getElementById('theme-toggle');
-    this.sortButton = document.getElementById('sort-button');
-    this.filterButton = document.getElementById('filter-button');
-    
-    // Статистика
-    this.monthlyExpenseElement = document.getElementById('monthly-expense');
-    this.activeCountElement = document.getElementById('active-count');
-    this.yearlyForecastElement = document.getElementById('yearly-forecast');
-    
-    // Элементы формы
-    this.nameInput = document.getElementById('subscription-name');
-    this.priceInput = document.getElementById('subscription-price');
-    this.periodSelect = document.getElementById('subscription-period');
-    this.nextPaymentInput = document.getElementById('subscription-next-payment');
-    this.categorySelect = document.getElementById('subscription-category');
+    try {
+      // Основные элементы
+      this.subscriptionsList = document.getElementById('subscriptions-list');
+      this.modal = document.getElementById('subscription-modal');
+      this.modalTitle = document.getElementById('modal-title');
+      this.subscriptionForm = document.getElementById('subscription-form');
+      this.searchInput = document.getElementById('search-input');
+      this.toastContainer = document.getElementById('toast-container');
+      this.loadingElement = document.getElementById('loading');
+      
+      // Кнопки
+      this.addButton = document.getElementById('add-subscription');
+      this.closeModalButton = document.getElementById('close-modal');
+      this.cancelButton = document.getElementById('cancel-button');
+      this.saveButton = document.getElementById('save-button');
+      this.themeToggle = document.getElementById('theme-toggle');
+      this.sortButton = document.getElementById('sort-button');
+      this.filterButton = document.getElementById('filter-button');
+      
+      // Статистика
+      this.monthlyExpenseElement = document.getElementById('monthly-expense');
+      this.activeCountElement = document.getElementById('active-count');
+      this.yearlyForecastElement = document.getElementById('yearly-forecast');
+      
+      // Элементы формы
+      this.nameInput = document.getElementById('subscription-name');
+      this.priceInput = document.getElementById('subscription-price');
+      this.currencySelect = document.getElementById('subscription-currency');
+      this.periodSelect = document.getElementById('subscription-period');
+      this.nextPaymentInput = document.getElementById('subscription-next-payment');
+      this.categorySelect = document.getElementById('subscription-category');
+      
+      // Проверяем критически важные элементы
+      const criticalElements = [
+        'subscriptions-list', 'loading', 'toast-container'
+      ];
+      
+      const missingElements = criticalElements.filter(id => !document.getElementById(id));
+      if (missingElements.length > 0) {
+        console.error('Критически важные элементы не найдены:', missingElements);
+      } else {
+        console.log('Все критически важные элементы найдены');
+      }
+    } catch (error) {
+      console.error('Ошибка при инициализации элементов:', error);
+    }
   }
 
   bindEvents() {
@@ -94,15 +134,30 @@ class SubscriptionUI {
   // ===========================
 
   loadInitialData() {
+    console.log('Начата загрузка начальных данных');
     this.showLoading(true);
+    
     try {
+      // Проверяем доступность subscriptionDB
+      if (!window.subscriptionDB) {
+        throw new Error('subscriptionDB не доступен');
+      }
+      
+      console.log('Обновление статистики...');
       this.updateStatistics();
+      
+      console.log('Отображение подписок...');
       this.renderSubscriptions();
+      
+      console.log('Загрузка темы...');
       this.loadTheme();
+      
+      console.log('Начальные данные успешно загружены');
     } catch (error) {
       console.error('Ошибка загрузки данных:', error);
-      this.showToast({ type: 'error', message: 'Ошибка загрузки данных' });
+      this.showToast({ type: 'error', message: 'Ошибка загрузки данных: ' + error.message });
     } finally {
+      console.log('Скрытие экрана загрузки');
       this.showLoading(false);
     }
   }
@@ -148,6 +203,7 @@ class SubscriptionUI {
     const statusClass = this.getSubscriptionStatus(subscription);
     const monthlyPrice = subscription.period === 'yearly' ? subscription.price / 12 : subscription.price;
     const nextPaymentFormatted = this.formatDate(subscription.nextPayment);
+    const currency = subscription.currency || 'UAH';
     
     div.innerHTML = `
       <div class="subscription-info">
@@ -157,14 +213,14 @@ class SubscriptionUI {
         <div class="subscription-details">
           <h3>${this.escapeHtml(subscription.name)}</h3>
           <div class="subscription-meta">
-            <span>${this.formatCurrency(monthlyPrice)}/мес</span>
+            <span>${this.formatCurrency(monthlyPrice, currency)}/мес</span>
             <span>Следующий платёж: ${nextPaymentFormatted}</span>
             <span class="subscription-status ${statusClass}">${this.getStatusText(statusClass)}</span>
           </div>
         </div>
       </div>
       <div class="subscription-price">
-        ${this.formatCurrency(subscription.price)}
+        ${this.formatCurrency(subscription.price, currency)}
         <small>/${subscription.period === 'monthly' ? 'мес' : 'год'}</small>
       </div>
       <div class="subscription-actions">
@@ -215,9 +271,16 @@ class SubscriptionUI {
     try {
       const stats = subscriptionDB.getStatistics();
       
-      this.monthlyExpenseElement.textContent = this.formatCurrency(stats.monthlyTotal);
+      // Группируем по валютам
+      const statsByCurrency = this.groupStatisticsByCurrency(stats);
+      
+      // Показываем статистику для основной валюты
+      const defaultCurrency = subscriptionDB.getSetting('currency', 'UAH');
+      const defaultStats = statsByCurrency[defaultCurrency] || { monthlyTotal: 0, yearlyTotal: 0 };
+      
+      this.monthlyExpenseElement.textContent = this.formatCurrency(defaultStats.monthlyTotal, defaultCurrency);
       this.activeCountElement.textContent = stats.activeCount.toString();
-      this.yearlyForecastElement.textContent = this.formatCurrency(stats.yearlyTotal);
+      this.yearlyForecastElement.textContent = this.formatCurrency(defaultStats.yearlyTotal, defaultCurrency);
       
       // Анимация обновления статистики
       [this.monthlyExpenseElement, this.activeCountElement, this.yearlyForecastElement].forEach(element => {
@@ -227,6 +290,26 @@ class SubscriptionUI {
     } catch (error) {
       console.error('Ошибка обновления статистики:', error);
     }
+  }
+  
+  groupStatisticsByCurrency(stats) {
+    const subscriptions = subscriptionDB.getActiveSubscriptions();
+    const statsByCurrency = {};
+    
+    subscriptions.forEach(sub => {
+      const currency = sub.currency || 'UAH';
+      if (!statsByCurrency[currency]) {
+        statsByCurrency[currency] = { monthlyTotal: 0, yearlyTotal: 0 };
+      }
+      
+      const monthlyPrice = sub.period === 'yearly' ? sub.price / 12 : sub.price;
+      const yearlyPrice = sub.period === 'monthly' ? sub.price * 12 : sub.price;
+      
+      statsByCurrency[currency].monthlyTotal += monthlyPrice;
+      statsByCurrency[currency].yearlyTotal += yearlyPrice;
+    });
+    
+    return statsByCurrency;
   }
 
   // ===========================
@@ -270,6 +353,7 @@ class SubscriptionUI {
   fillForm(subscription) {
     this.nameInput.value = subscription.name;
     this.priceInput.value = subscription.price;
+    this.currencySelect.value = subscription.currency || 'UAH';
     this.periodSelect.value = subscription.period;
     this.nextPaymentInput.value = subscription.nextPayment;
     this.categorySelect.value = subscription.category;
@@ -302,6 +386,7 @@ class SubscriptionUI {
       const subscriptionData = {
         name: formData.get('name').trim(),
         price: parseFloat(formData.get('price')),
+        currency: formData.get('currency'),
         period: formData.get('period'),
         nextPayment: formData.get('nextPayment'),
         category: formData.get('category')
@@ -476,23 +561,53 @@ class SubscriptionUI {
   // ===========================
 
   showLoading(show) {
-    if (this.loadingElement) {
-      this.loadingElement.hidden = !show;
+    console.log('showLoading вызван:', show);
+    
+    // Находим элемент загрузки
+    const loadingElement = this.loadingElement || document.getElementById('loading');
+    
+    if (loadingElement) {
+      if (show) {
+        loadingElement.hidden = false;
+        loadingElement.style.display = 'flex';
+        console.log('Показан экран загрузки');
+      } else {
+        loadingElement.hidden = true;
+        loadingElement.style.display = 'none';
+        console.log('Скрыт экран загрузки');
+      }
+    } else {
+      console.warn('Элемент loading не найден');
     }
   }
 
-  formatCurrency(amount) {
-    return new Intl.NumberFormat('ru-RU', {
-      style: 'currency',
-      currency: 'RUB',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(amount);
+  formatCurrency(amount, currency = null) {
+    // Получаем валюту из настроек или используем переданную
+    const currencyCode = currency || window.subscriptionDB?.getSetting('currency', 'UAH') || 'UAH';
+    
+    const currencyConfig = {
+      UAH: { locale: 'uk-UA', symbol: '₴' },
+      USD: { locale: 'en-US', symbol: '$' }
+    };
+    
+    const config = currencyConfig[currencyCode] || currencyConfig.UAH;
+    
+    try {
+      return new Intl.NumberFormat(config.locale, {
+        style: 'currency',
+        currency: currencyCode,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(amount);
+    } catch (error) {
+      // Fallback для случая ошибки форматирования
+      return `${config.symbol}${Math.round(amount)}`;
+    }
   }
 
   formatDate(dateString) {
     const date = new Date(dateString);
-    return date.toLocaleDateString('ru-RU', {
+    return date.toLocaleDateString('uk-UA', {
       day: 'numeric',
       month: 'short',
       year: 'numeric'
@@ -556,13 +671,29 @@ class SubscriptionUI {
   }
 }
 
-// Создать глобальный экземпляр UI
-const subscriptionUI = new SubscriptionUI();
+// Инициализация после загрузки DOM
+let subscriptionUI = null;
+
+function initializeSubscriptionUI() {
+  if (!subscriptionUI) {
+    console.log('Создание экземпляра SubscriptionUI...');
+    subscriptionUI = new SubscriptionUI();
+    window.subscriptionUI = subscriptionUI;
+  }
+  return subscriptionUI;
+}
+
+// Ожидаем готовности DOM
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeSubscriptionUI);
+} else {
+  initializeSubscriptionUI();
+}
 
 // Экспорт для использования в других модулях
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { SubscriptionUI, subscriptionUI };
+  module.exports = { SubscriptionUI, subscriptionUI: () => subscriptionUI };
 } else {
-  window.subscriptionUI = subscriptionUI;
   window.SubscriptionUI = SubscriptionUI;
+  window.initializeSubscriptionUI = initializeSubscriptionUI;
 }

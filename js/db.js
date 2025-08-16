@@ -20,7 +20,7 @@ class SubscriptionDB {
         this.saveSettings({
           theme: 'light',
           language: 'ru',
-          currency: 'RUB',
+          currency: 'UAH',
           notifications: true
         });
       }
@@ -157,6 +157,7 @@ class SubscriptionDB {
       id,
       name: data.name || '',
       price: parseFloat(data.price) || 0,
+      currency: data.currency || this.getSetting('currency', 'UAH'),
       period: data.period || 'monthly',
       nextPayment: data.nextPayment || this.calculateNextPayment(data.period),
       category: data.category || 'other',

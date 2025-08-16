@@ -471,9 +471,11 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: var(--spacing-md);
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease;
+  box-sizing: border-box;
 }
 
 .modal.active {
@@ -489,6 +491,7 @@ html {
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
+  z-index: -1;
 }
 
 .modal-content {
@@ -496,12 +499,16 @@ html {
   border-radius: var(--radius-xl);
   box-shadow: var(--elevation-4);
   max-width: 500px;
-  width: 90%;
-  max-height: 90vh;
+  width: 100%;
+  max-height: calc(100vh - 2 * var(--spacing-md));
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
   position: relative;
+  z-index: 1;
   transform: scale(0.9);
   transition: all 0.3s ease;
+  box-sizing: border-box;
 }
 
 .modal.active .modal-content {
@@ -524,8 +531,9 @@ html {
 
 .modal-body {
   padding: var(--spacing-lg);
-  max-height: 60vh;
+  flex: 1;
   overflow-y: auto;
+  min-height: 0;
 }
 
 .modal-footer {
@@ -534,6 +542,7 @@ html {
   gap: var(--spacing-sm);
   padding: var(--spacing-lg);
   border-top: 1px solid var(--outline);
+  flex-shrink: 0;
 }
 
 /* ===========================
@@ -784,8 +793,15 @@ html {
     align-self: flex-end;
   }
   
+  .modal {
+    padding: var(--spacing-sm);
+  }
+  
   .modal-content {
-    width: 95%;
+    width: 100%;
+    max-width: none;
+    max-height: calc(100vh - 2 * var(--spacing-sm));
+    border-radius: var(--radius-lg);
   }
   
   .install-prompt {
@@ -801,6 +817,23 @@ html {
   
   .chart-container {
     height: 30vh;
+  }
+}
+
+/* Медиа-запросы для больших экранов (десктоп) */
+@media (min-width: 1024px) {
+  .modal {
+    padding: var(--spacing-xl);
+    place-items: center;
+    place-content: center;
+  }
+  
+  .modal-content {
+    max-width: 600px;
+    min-width: 500px;
+    margin: 0 auto;
+    align-self: center;
+    justify-self: center;
   }
 }
 

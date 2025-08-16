@@ -409,7 +409,7 @@ class SubscriptionCharts {
       const date = new Date();
       date.setMonth(date.getMonth() - i);
       
-      months.push(date.toLocaleDateString('ru-RU', { month: 'short', year: '2-digit' }));
+      months.push(date.toLocaleDateString('uk-UA', { month: 'short', year: '2-digit' }));
       
       // Симулируем изменение расходов (в реальном приложении здесь была бы история)
       const variation = (Math.random() - 0.5) * 0.3;
@@ -506,9 +506,9 @@ class SubscriptionCharts {
   // ===========================
 
   formatCurrency(amount) {
-    return new Intl.NumberFormat('ru-RU', {
+    return new Intl.NumberFormat('uk-UA', {
       style: 'currency',
-      currency: 'RUB',
+      currency: 'UAH',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(amount);

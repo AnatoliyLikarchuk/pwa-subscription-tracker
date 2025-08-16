@@ -496,7 +496,7 @@ class I18n {
     return new Intl.NumberFormat(this.getLocaleCode(), options).format(number);
   }
 
-  formatCurrency(amount, currency = 'RUB') {
+  formatCurrency(amount, currency = 'UAH') {
     return new Intl.NumberFormat(this.getLocaleCode(), {
       style: 'currency',
       currency: currency,
