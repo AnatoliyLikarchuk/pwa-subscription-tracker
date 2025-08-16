@@ -491,7 +491,7 @@ html {
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
-  z-index: -1;
+  z-index: 1;
 }
 
 .modal-content {
@@ -505,10 +505,11 @@ html {
   display: flex;
   flex-direction: column;
   position: relative;
-  z-index: 1;
+  z-index: 2;
   transform: scale(0.9);
   transition: all 0.3s ease;
   box-sizing: border-box;
+  margin: auto;
 }
 
 .modal.active .modal-content {
@@ -824,16 +825,17 @@ html {
 @media (min-width: 1024px) {
   .modal {
     padding: var(--spacing-xl);
-    place-items: center;
-    place-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .modal-content {
     max-width: 600px;
     min-width: 500px;
-    margin: 0 auto;
+    margin: 0;
     align-self: center;
-    justify-self: center;
+    flex-shrink: 0;
   }
 }
 
