@@ -471,7 +471,8 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--spacing-md);
+  padding: 0;
+  margin: 0;
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease;
@@ -496,11 +497,11 @@ html {
 
 .modal-content {
   background-color: var(--surface);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--elevation-4);
+  border-radius: 16px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   max-width: 500px;
-  width: 100%;
-  max-height: calc(100vh - 2 * var(--spacing-md));
+  width: 90%;
+  max-height: 90vh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -509,6 +510,7 @@ html {
   transform: scale(0.9);
   transition: all 0.3s ease;
   box-sizing: border-box;
+  margin: 20px;
 }
 
 .modal.active .modal-content {
@@ -822,13 +824,10 @@ html {
 
 /* Медиа-запросы для больших экранов (десктоп) */
 @media (min-width: 1024px) {
-  .modal {
-    padding: var(--spacing-xl);
-  }
-  
   .modal-content {
     max-width: 600px;
     min-width: 500px;
+    margin: 40px;
   }
 }
 
